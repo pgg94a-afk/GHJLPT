@@ -100,7 +100,7 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
     var selectedTab by remember { mutableStateOf(0) } // 0: 단어, 1: 문법
     var selectedWordLevels by remember { mutableStateOf(List(14) { false }) }
-    var selectedGrammarLevels by remember { mutableStateOf(List(10) { false }) } // 6~10 레벨
+    var selectedGrammarLevels by remember { mutableStateOf(List(16) { false }) } // 6~10 레벨
 
     val scrollBackgroundColor = YongdalBlueSurface
 
