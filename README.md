@@ -70,56 +70,10 @@ GHJLPT/
 └── settings.gradle.kts
 ```
 
-## 🎨 데이터 모델
-
-### JPWord (단어)
-```kotlin
-data class JPWord(
-    val word: String,               // 일본어 단어 (예: "連想する")
-    val kana: String,               // 히라가나 (예: "れんそうする")
-    val meaning: String,            // 한국어 의미 (예: "연상하다")
-    val koreanPronounce: String    // 한국어 발음 (예: "렌소우스루")
-)
-```
-
-### Grammar (문법)
-```kotlin
-data class Grammar(
-    val japaneseGrammar: String,    // 문법 패턴 (예: "~さえ~ば")
-    val connection: String,         // 접속 형태
-    val meaning: String,            // 한국어 의미
-    val hiragana: String,           // 히라가나 표기
-    val koreanPronounce: String    // 한국어 발음
-)
-```
-
-## 🚀 시작하기
-
 ### 요구사항
 - Android Studio (최신 버전 권장)
 - JDK 17 이상
 - Android SDK (minSdk 26)
-
-### 설치 및 실행
-
-1. 저장소 클론
-```bash
-git clone https://github.com/pgg94a-afk/GHJLPT.git
-cd GHJLPT
-```
-
-2. Android Studio에서 프로젝트 열기
-
-3. Gradle 동기화 대기
-
-4. 에뮬레이터 또는 실제 기기에서 실행
-
-### CLI 테스트 도구 사용
-
-```bash
-# test.kt를 사용한 콘솔 학습 (개발/테스트용)
-# MainActivity에서 사용하거나 별도로 실행 가능
-```
 
 ## 🎯 사용 방법
 
@@ -132,41 +86,5 @@ cd GHJLPT
    - 암기 모드: 카드를 탭하여 내용 확인
    - 퀴즈 모드: 한국어 발음 입력 후 확인
 5. **복습**: 어려운 단어/문법 표시 후 필터링하여 집중 학습
-
-## 🎨 테마 색상
-
-애플리케이션은 "YongdalBlue" 커스텀 테마를 사용합니다:
-- 메인 블루: `#0D47A1`
-- 라이트 액센트: `#42A5F5`
-- 다크 변형: `#01579B`
-- 배경: `#E3F2FD`
-
-## 📊 학습 통계
-
-| 항목 | 수량 |
-|------|------|
-| 단어 레벨 | 14개 |
-| 총 단어 수 | 700+ |
-| 문법 레벨 | 14개 |
-| 총 문법 패턴 | 60+ |
-| UI 화면 | 4개 |
-
-## 🤝 기여하기
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📝 라이선스
-
-이 프로젝트는 개인 학습 목적으로 개발되었습니다.
-
-## 📞 연락처
-
-프로젝트 링크: [https://github.com/pgg94a-afk/GHJLPT](https://github.com/pgg94a-afk/GHJLPT)
-
----
 
 **JLPT N3 합격을 향해 함께 달려봅시다! 🎌📚**
