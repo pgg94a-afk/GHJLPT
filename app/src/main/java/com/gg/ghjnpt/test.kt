@@ -276,12 +276,28 @@ fun wordQuizMode() {
         println("\n[$index] ${word.word}")
         print("뜻을 입력하세요: ")
 
-        val answer = readLine()?.trim()
-        if (answer == word.meaning) {
-            println("✅ 정답! (${word.kana} : ${word.meaning} : ${word.koreanPronounce})")
+        val answer = readLine()?.trim() ?: ""
+
+        // AI를 이용한 답변 평가
+        println("\n🤖 AI가 답변을 평가하는 중...")
+        val evaluation = AIAnswerChecker.evaluateAnswer(
+            japaneseWord = word.word,
+            correctMeaning = word.meaning,
+            userAnswer = answer
+        )
+
+        println("\n📊 평가 결과:")
+        println("  정확도: ${evaluation.accuracy}%")
+        println("  이유: ${evaluation.reason}")
+        println("  예문: ${evaluation.example}")
+        println("  정답: ${word.kana} : ${word.meaning} : ${word.koreanPronounce}")
+
+        // 80% 이상이면 정답으로 인정
+        if (evaluation.accuracy >= 80) {
+            println("✅ 정답으로 인정합니다!")
             corrects.add(word)
         } else {
-            println("❌ 오답! 정답은 (${word.kana} : ${word.meaning} : ${word.koreanPronounce})")
+            println("❌ 오답입니다.")
             wrongs.add(word)
         }
     }
