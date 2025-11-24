@@ -73,4 +73,7 @@ dependencies {
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:6.6.7")
+
+    // Google AI Generative AI SDK
+    implementation(libs.google.ai.client)
 }
