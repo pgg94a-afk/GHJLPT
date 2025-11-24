@@ -10,7 +10,7 @@ data class AnswerEvaluation(
 )
 
 object AIAnswerChecker {
-    private const val API_KEY = "YOUR_GEMINI_API_KEY_HERE" // TODO: 실제 API 키로 교체 필요
+    private const val API_KEY = "AIzaSyCz_x5VItAymM1KK0vFDbF7rHcwJRGhNAM" // TODO: 실제 API 키로 교체 필요
 
     private val model = GenerativeModel(
         modelName = "gemini-pro",
