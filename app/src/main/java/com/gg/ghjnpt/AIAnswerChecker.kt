@@ -10,7 +10,7 @@ data class AnswerEvaluation(
 )
 
 object AIAnswerChecker {
-    private const val API_KEY = "YOUR_GEMINI_API_KEY_HERE" // TODO: 실제 API 키로 교체 필요
+    private val API_KEY = BuildConfig.GEMINI_API_KEY
     private const val API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
 
 
