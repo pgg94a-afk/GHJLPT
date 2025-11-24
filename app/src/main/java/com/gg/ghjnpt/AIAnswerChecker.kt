@@ -32,7 +32,9 @@ object AIAnswerChecker {
 
                 정확도: [0-100 사이의 숫자만]
                 이유: [한 문장으로 간단히]
-                예문: [$japaneseWord 를 사용한 간단한 일본어 예문 한 개 (한글 해석 포함)]
+                예문: [$japaneseWord 를 사용한 JLPT N3 수준의 간단한 일본어 예문 한 개]
+                한글발음: [위 예문의 한글 발음]
+                해석: [위 예문의 한글 해석]
 
                 형식을 정확히 지켜서 응답해주세요.
             """.trimIndent()
@@ -116,6 +118,8 @@ object AIAnswerChecker {
         var accuracy = 0
         var reason = ""
         var example = ""
+        var pronunciation = ""
+        var translation = ""
 
         for (line in lines) {
             when {
@@ -129,13 +133,36 @@ object AIAnswerChecker {
                 line.startsWith("예문:") -> {
                     example = line.substringAfter("예문:").trim()
                 }
+                line.startsWith("한글발음:") -> {
+                    pronunciation = line.substringAfter("한글발음:").trim()
+                }
+                line.startsWith("해석:") -> {
+                    translation = line.substringAfter("해석:").trim()
+                }
+            }
+        }
+
+        // 예문, 한글발음, 해석을 합쳐서 하나의 문자열로 만듭니다
+        val fullExample = buildString {
+            if (example.isNotEmpty()) {
+                append(example)
+            }
+            if (pronunciation.isNotEmpty()) {
+                append("\n")
+                append(pronunciation)
+            }
+            if (translation.isNotEmpty()) {
+                append("\n")
+                append("(")
+                append(translation)
+                append(")")
             }
         }
 
         return AnswerEvaluation(
             accuracy = accuracy.coerceIn(0, 100),
             reason = reason.ifEmpty { "평가를 가져올 수 없습니다." },
-            example = example.ifEmpty { "예문을 가져올 수 없습니다." }
+            example = fullExample.ifEmpty { "예문을 가져올 수 없습니다." }
         )
     }
 }
