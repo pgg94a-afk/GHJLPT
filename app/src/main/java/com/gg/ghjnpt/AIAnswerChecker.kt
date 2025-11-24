@@ -11,7 +11,9 @@ data class AnswerEvaluation(
 
 object AIAnswerChecker {
     private val API_KEY = BuildConfig.GEMINI_API_KEY
-    private const val API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent"
+    private const val API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+
+
 
 
 
