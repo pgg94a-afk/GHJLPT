@@ -1,7 +1,7 @@
 package com.gg.ghjnpt
 
-import com.google.ai.client.generativeai.GenerativeModel
-import kotlinx.coroutines.runBlocking
+import java.net.HttpURLConnection
+import java.net.URL
 
 data class AnswerEvaluation(
     val accuracy: Int,
@@ -11,45 +11,99 @@ data class AnswerEvaluation(
 
 object AIAnswerChecker {
     private const val API_KEY = "YOUR_GEMINI_API_KEY_HERE" // TODO: 실제 API 키로 교체 필요
-
-    private val model = GenerativeModel(
-        modelName = "gemini-pro",
-        apiKey = API_KEY
-    )
+    private const val API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
 
     fun evaluateAnswer(
         japaneseWord: String,
         correctMeaning: String,
         userAnswer: String
     ): AnswerEvaluation {
-        return runBlocking {
-            try {
-                val prompt = """
-                    일본어 단어: $japaneseWord
-                    정답: $correctMeaning
-                    사용자 답변: $userAnswer
+        return try {
+            val prompt = """
+                일본어 단어: $japaneseWord
+                정답: $correctMeaning
+                사용자 답변: $userAnswer
 
-                    위 일본어 단어의 정답과 사용자의 답변을 비교하여 다음 형식으로 평가해주세요:
+                위 일본어 단어의 정답과 사용자의 답변을 비교하여 다음 형식으로 평가해주세요:
 
-                    정확도: [0-100 사이의 숫자만]
-                    이유: [한 문장으로 간단히]
-                    예문: [$japaneseWord 를 사용한 간단한 일본어 예문 한 개 (한글 해석 포함)]
+                정확도: [0-100 사이의 숫자만]
+                이유: [한 문장으로 간단히]
+                예문: [$japaneseWord 를 사용한 간단한 일본어 예문 한 개 (한글 해석 포함)]
 
-                    형식을 정확히 지켜서 응답해주세요.
-                """.trimIndent()
+                형식을 정확히 지켜서 응답해주세요.
+            """.trimIndent()
 
-                val response = model.generateContent(prompt)
-                val text = response.text ?: ""
-
-                parseEvaluation(text)
-            } catch (e: Exception) {
-                AnswerEvaluation(
-                    accuracy = 0,
-                    reason = "AI 평가 중 오류가 발생했습니다: ${e.message}",
-                    example = ""
-                )
-            }
+            val response = callGeminiAPI(prompt)
+            parseEvaluation(response)
+        } catch (e: Exception) {
+            AnswerEvaluation(
+                accuracy = 0,
+                reason = "AI 평가 중 오류가 발생했습니다: ${e.message}",
+                example = ""
+            )
         }
+    }
+
+    private fun callGeminiAPI(prompt: String): String {
+        val url = URL("$API_URL?key=$API_KEY")
+        val connection = url.openConnection() as HttpURLConnection
+
+        try {
+            connection.requestMethod = "POST"
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.doOutput = true
+
+            // Create request body manually (no JSON library needed)
+            val escapedPrompt = prompt.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t")
+
+            val requestBody = """
+                {
+                    "contents": [{
+                        "parts": [{
+                            "text": "$escapedPrompt"
+                        }]
+                    }]
+                }
+            """.trimIndent()
+
+            // Send request
+            connection.outputStream.use { os ->
+                os.write(requestBody.toByteArray(Charsets.UTF_8))
+            }
+
+            // Read response
+            val responseCode = connection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val responseText = connection.inputStream.bufferedReader().use { it.readText() }
+
+                // Simple JSON parsing to extract text
+                return extractTextFromResponse(responseText)
+            } else {
+                val errorText = connection.errorStream?.bufferedReader()?.use { it.readText() } ?: "Unknown error"
+                throw Exception("API call failed with response code: $responseCode, error: $errorText")
+            }
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    private fun extractTextFromResponse(json: String): String {
+        // Simple regex-based extraction (works without JSON library)
+        val textPattern = """"text"\s*:\s*"((?:[^"\\]|\\.)*)"""".toRegex()
+        val match = textPattern.find(json)
+
+        return match?.groupValues?.get(1)?.let { text ->
+            // Unescape the JSON string
+            text.replace("\\n", "\n")
+                .replace("\\r", "\r")
+                .replace("\\t", "\t")
+                .replace("\\\"", "\"")
+                .replace("\\\\", "\\")
+        } ?: ""
     }
 
     private fun parseEvaluation(response: String): AnswerEvaluation {
