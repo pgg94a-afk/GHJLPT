@@ -1,3 +1,4 @@
+import com.gg.ghjnpt.AIAnswerChecker
 import com.gg.ghjnpt.data.Grammar
 import com.gg.ghjnpt.data.GrammarData
 import com.gg.ghjnpt.data.JPWord
