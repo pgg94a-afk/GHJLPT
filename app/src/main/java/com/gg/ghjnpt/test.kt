@@ -82,6 +82,8 @@ fun selectGrammarGroups(): Map<Int, List<Grammar>> {
         13 to GrammarData.Grammars13,
         14 to GrammarData.Grammars14,
         16 to GrammarData.Grammars16,
+        17 to GrammarData.Grammars17,
+        18 to GrammarData.Grammars18,
     )
 
     println("\n문법 그룹을 선택하세요:")

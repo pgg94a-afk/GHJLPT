@@ -35,7 +35,8 @@ class QuizViewModel : ViewModel() {
         2 to listOf(3, 4, 5),
         3 to listOf(6, 7, 8),
         4 to listOf(9, 10, 11),
-        5 to listOf(12, 13, 14)
+        5 to listOf(12, 13, 14),
+        6 to listOf(15, 16, 17)
     )
 
     private val levelWordMap = mapOf(
@@ -52,7 +53,10 @@ class QuizViewModel : ViewModel() {
         11 to JPWordData.JPWords11,
         12 to JPWordData.JPWords12,
         13 to JPWordData.JPWords13,
-        14 to JPWordData.JPWords14
+        14 to JPWordData.JPWords14,
+        15 to JPWordData.JPWords15,
+        16 to JPWordData.JPWords16,
+        17 to JPWordData.JPWords17,
     )
 
     // ✅ 문법 레벨 매핑
@@ -66,7 +70,16 @@ class QuizViewModel : ViewModel() {
         7 to GrammarData.Grammars7,
         8 to GrammarData.Grammars8,
         9 to GrammarData.Grammars9,
-        10 to GrammarData.Grammars10
+        10 to GrammarData.Grammars10,
+        11 to GrammarData.Grammars11,
+        12 to GrammarData.Grammars12,
+        13 to GrammarData.Grammars13,
+        14 to GrammarData.Grammars14,
+        16 to GrammarData.Grammars16,
+        17 to GrammarData.Grammars17,
+        18 to GrammarData.Grammars18,
+
+
     )
 
     fun loadSelectedWords(selectedLevels: List<Int>) {
