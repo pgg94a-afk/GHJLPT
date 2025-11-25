@@ -99,8 +99,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
     var selectedTab by remember { mutableStateOf(0) } // 0: 단어, 1: 문법
-    var selectedWordLevels by remember { mutableStateOf(List(14) { false }) }
-    var selectedGrammarLevels by remember { mutableStateOf(List(16) { false }) } // 6~10 레벨
+    var selectedWordLevels by remember { mutableStateOf(List(17) { false }) }
+    var selectedGrammarLevels by remember { mutableStateOf(List(18) { false }) }
 
     val scrollBackgroundColor = YongdalBlueSurface
 
@@ -236,6 +236,18 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                                     }
                                 )
                             }
+                            item {
+                                DaySection(
+                                    title = "6일차",
+                                    levels = listOf(15, 16, 17),
+                                    selectedLevels = selectedWordLevels,
+                                    onLevelToggle = { level ->
+                                        selectedWordLevels = selectedWordLevels.mapIndexed { i, selected ->
+                                            if (i == level - 1) !selected else selected
+                                        }
+                                    }
+                                )
+                            }
                         }
                     } else {
                         // ✅ 문법 선택 UI
@@ -245,8 +257,8 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                                 .padding(16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            items(10) { index ->
-                                val grammarLevel = index + 1 // 1~10
+                            items(18) { index ->
+                                val grammarLevel = index + 1 // 1~18
                                 GrammarCheckboxCard(
                                     level = grammarLevel,
                                     isSelected = selectedGrammarLevels[index],
