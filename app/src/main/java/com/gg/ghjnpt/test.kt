@@ -465,23 +465,29 @@ fun conjunctionQuizMode() {
 
         val answer = readLine()?.trim() ?: ""
 
-        // 정답 체크 (뜻이 여러 개일 수 있으므로 포함 여부로 체크)
-        val isCorrect = when (quizType) {
-            "2" -> answer == correctAnswer
-            else -> correctAnswer.split(",", "/", "·").any {
-                it.trim().contains(answer) || answer.contains(it.trim())
-            } && answer.isNotEmpty()
-        }
+        // AI를 이용한 답변 평가
+        println("\n🤖 AI가 답변을 평가하는 중...")
+        val evaluation = AIAnswerChecker.evaluateConjunctionAnswer(
+            japaneseConjunction = conj.japanese,
+            correctMeaning = conj.meaning,
+            description = conj.description,
+            userAnswer = answer
+        )
 
-        if (isCorrect) {
-            println("✅ 정답!")
-            println("   ${conj.japanese} : ${conj.meaning}")
-            println("   💡 ${conj.description}")
+        println("\n📊 평가 결과:")
+        println("  정확도: ${evaluation.accuracy}%")
+        println("  이유: ${evaluation.reason}")
+        println("  정답: ${conj.japanese} : ${conj.meaning}")
+        println("  💡 ${conj.description}")
+        println("\n📖 예문:")
+        println("  ${evaluation.example}")
+
+        // 80% 이상이면 정답으로 인정
+        if (evaluation.accuracy >= 80) {
+            println("\n✅ 정답으로 인정합니다!")
             corrects.add(conj)
         } else {
-            println("❌ 오답!")
-            println("   정답: ${conj.japanese} : ${conj.meaning}")
-            println("   💡 ${conj.description}")
+            println("\n❌ 오답입니다.")
             wrongs.add(conj)
         }
     }

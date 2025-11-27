@@ -50,6 +50,41 @@ object AIAnswerChecker {
         }
     }
 
+    fun evaluateConjunctionAnswer(
+        japaneseConjunction: String,
+        correctMeaning: String,
+        description: String,
+        userAnswer: String
+    ): AnswerEvaluation {
+        return try {
+            val prompt = """
+                일본어 접속사: $japaneseConjunction
+                정답: $correctMeaning
+                설명: $description
+                사용자 답변: $userAnswer
+
+                위 일본어 접속사의 정답과 사용자의 답변을 비교하여 다음 형식으로 평가해주세요:
+
+                정확도: [0-100 사이의 숫자만]
+                이유: [한 문장으로 간단히]
+                예문: [$japaneseConjunction 를 사용한 JLPT N3 수준의 간단한 일본어 예문 한 개 (앞뒤 문장 포함)]
+                한글발음: [위 예문의 한글 발음]
+                해석: [위 예문의 한글 해석]
+
+                형식을 정확히 지켜서 응답해주세요.
+            """.trimIndent()
+
+            val response = callGeminiAPI(prompt)
+            parseEvaluation(response)
+        } catch (e: Exception) {
+            AnswerEvaluation(
+                accuracy = 0,
+                reason = "AI 평가 중 오류가 발생했습니다: ${e.message}",
+                example = ""
+            )
+        }
+    }
+
     private fun callGeminiAPI(prompt: String): String {
         val url = URL("$API_URL?key=$API_KEY")
         val connection = url.openConnection() as HttpURLConnection
