@@ -14,3 +14,10 @@ data class Grammar(
     val hiragana: String,         // 히라가나
     val koreanPronounce: String   // 한글발음
 )
+
+data class Conjunction(
+    val japanese: String,      // 일본어 접속사
+    val meaning: String,       // 한국어 뜻
+    val description: String,   // 설명
+    val category: String       // 카테고리 (순접, 역접 등)
+)

@@ -1,4 +1,6 @@
 import com.gg.ghjnpt.AIAnswerChecker
+import com.gg.ghjnpt.data.Conjunction
+import com.gg.ghjnpt.data.ConjunctionData
 import com.gg.ghjnpt.data.Grammar
 import com.gg.ghjnpt.data.GrammarData
 import com.gg.ghjnpt.data.JPWord
@@ -9,23 +11,25 @@ fun main() {
     println("일본어 학습 프로그램")
     println("=".repeat(50))
 
-    // 학습 유형 선택
     println("\n학습 유형을 선택하세요:")
     println("1. 문법 학습")
     println("2. 단어 학습")
-    print("선택 (1 또는 2): ")
+    println("3. 접속사 학습")  // 추가
+    print("선택 (1, 2 또는 3): ")
 
     val studyType = readLine()?.trim()
 
     when (studyType) {
         "1" -> grammarStudy()
         "2" -> wordStudy()
+        "3" -> conjunctionStudy()  // 추가
         else -> {
             println("잘못된 입력입니다. 프로그램을 종료합니다.")
             return
         }
     }
 }
+
 
 fun grammarStudy() {
     // 모드 선택
@@ -319,6 +323,184 @@ fun wordQuizMode() {
         wrongs.forEach {
             println("${it.word}")
             println("  ➜ ${it.kana} : ${it.meaning} : ${it.koreanPronounce}")
+        }
+    }
+
+    println("\n" + "=".repeat(50))
+}
+
+fun conjunctionStudy() {
+    println("\n모드를 선택하세요:")
+    println("1. 암기 모드")
+    println("2. 퀴즈 모드")
+    print("선택 (1 또는 2): ")
+
+    val mode = readLine()?.trim()
+
+    when (mode) {
+        "1" -> conjunctionMemorizeMode()
+        "2" -> conjunctionQuizMode()
+        else -> {
+            println("잘못된 입력입니다.")
+            return
+        }
+    }
+}
+
+fun selectConjunctionGroups(): Map<String, List<Conjunction>> {
+    val allConjunctions = mapOf(
+        "N3_순접추가" to ConjunctionData.N3_Sequential,
+        "N3_역접대조" to ConjunctionData.N3_Contradictory,
+        "N3_이유원인" to ConjunctionData.N3_Reason,
+        "N3_전환조건" to ConjunctionData.N3_Transition,
+        "N4_순접추가" to ConjunctionData.N4_Sequential,
+        "N4_역접" to ConjunctionData.N4_Contradictory,
+        "N4_이유원인" to ConjunctionData.N4_Reason,
+        "N4_전환조건" to ConjunctionData.N4_Transition,
+    )
+
+    println("\n접속사 그룹을 선택하세요:")
+    println("0. 전체 선택")
+    println("1. N3 전체")
+    println("2. N4 전체")
+    println("3. N3 순접·추가")
+    println("4. N3 역접·대조")
+    println("5. N3 이유·원인")
+    println("6. N3 전환·조건")
+    println("7. N4 순접·추가")
+    println("8. N4 역접")
+    println("9. N4 이유·원인")
+    println("10. N4 전환·조건")
+    print("선택 (0-10, 여러 개는 쉼표로 구분): ")
+
+    val input = readLine()?.trim() ?: "0"
+
+    val selectionMap = mapOf(
+        "0" to allConjunctions.keys.toList(),
+        "1" to listOf("N3_순접추가", "N3_역접대조", "N3_이유원인", "N3_전환조건"),
+        "2" to listOf("N4_순접추가", "N4_역접", "N4_이유원인", "N4_전환조건"),
+        "3" to listOf("N3_순접추가"),
+        "4" to listOf("N3_역접대조"),
+        "5" to listOf("N3_이유원인"),
+        "6" to listOf("N3_전환조건"),
+        "7" to listOf("N4_순접추가"),
+        "8" to listOf("N4_역접"),
+        "9" to listOf("N4_이유원인"),
+        "10" to listOf("N4_전환조건"),
+    )
+
+    val selectedKeys = input.split(",")
+        .flatMap { selectionMap[it.trim()] ?: emptyList() }
+        .distinct()
+
+    return allConjunctions.filterKeys { it in selectedKeys }
+}
+
+fun conjunctionMemorizeMode() {
+    println("\n📚 접속사 암기 모드를 시작합니다.")
+
+    val selectedConjunctions = selectConjunctionGroups()
+
+    if (selectedConjunctions.isEmpty()) {
+        println("선택된 접속사가 없습니다.")
+        return
+    }
+
+    val totalCount = selectedConjunctions.values.sumOf { it.size }
+    println("\n총 ${totalCount}개의 접속사를 표시합니다.")
+    println("=".repeat(50))
+
+    selectedConjunctions.forEach { (groupName, conjunctions) ->
+        println("\n【$groupName】 ${"―".repeat(35)}")
+
+        conjunctions.forEachIndexed { index, conj ->
+            println("\n${(index + 1).toString().padStart(3, ' ')}. ${conj.japanese}")
+            println("     뜻: ${conj.meaning}")
+            println("     설명: ${conj.description}")
+            println("     분류: ${conj.category}")
+            println("     " + "-".repeat(45))
+        }
+    }
+
+    println("\n" + "=".repeat(50))
+    println("암기 모드를 종료합니다.")
+}
+
+fun conjunctionQuizMode() {
+    println("\n✏️ 접속사 퀴즈 모드를 시작합니다.")
+
+    val selectedConjunctions = selectConjunctionGroups()
+
+    if (selectedConjunctions.isEmpty()) {
+        println("선택된 접속사가 없습니다.")
+        return
+    }
+
+    // 퀴즈 유형 선택
+    println("\n퀴즈 유형을 선택하세요:")
+    println("1. 일본어 → 한국어 뜻")
+    println("2. 한국어 뜻 → 일본어")
+    print("선택 (1 또는 2): ")
+
+    val quizType = readLine()?.trim() ?: "1"
+
+    val conjunctions = selectedConjunctions.values.flatten()
+    val corrects = mutableListOf<Conjunction>()
+    val wrongs = mutableListOf<Conjunction>()
+    val randomConjunctions = conjunctions.shuffled()
+
+    println("\n총 ${randomConjunctions.size}개의 문제가 출제됩니다.")
+    println("=".repeat(50))
+
+    randomConjunctions.forEachIndexed { id, conj ->
+        val index = (id + 1).toString().padStart(2, '0')
+
+        val (question, correctAnswer) = when (quizType) {
+            "2" -> conj.meaning to conj.japanese
+            else -> conj.japanese to conj.meaning
+        }
+
+        println("\n[$index] $question")
+        print("정답을 입력하세요: ")
+
+        val answer = readLine()?.trim() ?: ""
+
+        // 정답 체크 (뜻이 여러 개일 수 있으므로 포함 여부로 체크)
+        val isCorrect = when (quizType) {
+            "2" -> answer == correctAnswer
+            else -> correctAnswer.split(",", "/", "·").any {
+                it.trim().contains(answer) || answer.contains(it.trim())
+            } && answer.isNotEmpty()
+        }
+
+        if (isCorrect) {
+            println("✅ 정답!")
+            println("   ${conj.japanese} : ${conj.meaning}")
+            println("   💡 ${conj.description}")
+            corrects.add(conj)
+        } else {
+            println("❌ 오답!")
+            println("   정답: ${conj.japanese} : ${conj.meaning}")
+            println("   💡 ${conj.description}")
+            wrongs.add(conj)
+        }
+    }
+
+    println("\n" + "=".repeat(50))
+    println("📊 퀴즈 결과")
+    println("=".repeat(50))
+    println("총 문제 수: ${randomConjunctions.size}")
+    println("정답 수: ${corrects.size}")
+    println("오답 수: ${wrongs.size}")
+    println("정답률: ${String.format("%.1f", (corrects.size.toFloat() / randomConjunctions.size.toFloat()) * 100)}%")
+
+    if (wrongs.isNotEmpty()) {
+        println("\n👻 오답노트 👻")
+        println("-".repeat(50))
+        wrongs.forEach {
+            println("${it.japanese}")
+            println("  ➜ ${it.meaning}")
+            println("  💡 ${it.description}")
         }
     }
 
