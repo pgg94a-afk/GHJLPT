@@ -231,15 +231,18 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                         }
                     } else {
                         // 접속사 탭
-                        val conjunctionGroupsData = listOf(
-                            "N3 순접·추가" to "N3_순접추가",
-                            "N3 역접·대조" to "N3_역접대조",
-                            "N3 이유·원인" to "N3_이유원인",
-                            "N3 전환·조건" to "N3_전환조건",
-                            "N4 순접·추가" to "N4_순접추가",
-                            "N4 역접" to "N4_역접",
-                            "N4 이유·원인" to "N4_이유원인",
-                            "N4 전환·조건" to "N4_전환조건",
+                        val n3Groups = listOf(
+                            "순접·추가" to "N3_순접추가",
+                            "역접·대조" to "N3_역접대조",
+                            "이유·원인" to "N3_이유원인",
+                            "전환·조건" to "N3_전환조건",
+                        )
+
+                        val n4Groups = listOf(
+                            "순접·추가" to "N4_순접추가",
+                            "역접" to "N4_역접",
+                            "이유·원인" to "N4_이유원인",
+                            "전환·조건" to "N4_전환조건",
                         )
 
                         LazyColumn(
@@ -248,8 +251,44 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                                 .padding(16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            items(conjunctionGroupsData.size) { index ->
-                                val (groupName, groupKey) = conjunctionGroupsData[index]
+                            // N3 섹션
+                            item {
+                                Text(
+                                    text = "N3 접속사",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = YongdalBlueDark,
+                                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                                )
+                            }
+
+                            items(n3Groups.size) { index ->
+                                val (groupName, groupKey) = n3Groups[index]
+                                ConjunctionCheckboxCard(
+                                    groupName = groupName,
+                                    groupKey = groupKey,
+                                    isSelected = selectedConjunctionGroups[groupKey] ?: false,
+                                    onToggle = {
+                                        selectedConjunctionGroups = selectedConjunctionGroups.toMutableMap().apply {
+                                            this[groupKey] = !(selectedConjunctionGroups[groupKey] ?: false)
+                                        }
+                                    }
+                                )
+                            }
+
+                            // N4 섹션
+                            item {
+                                Text(
+                                    text = "N4 접속사",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = YongdalBlueDark,
+                                    modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                                )
+                            }
+
+                            items(n4Groups.size) { index ->
+                                val (groupName, groupKey) = n4Groups[index]
                                 ConjunctionCheckboxCard(
                                     groupName = groupName,
                                     groupKey = groupKey,
