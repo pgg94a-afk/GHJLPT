@@ -26,6 +26,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,8 +52,13 @@ fun QuizScreen(navController: NavHostController, viewModel: QuizViewModel) {
     val correctComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.correct))
     val wrongComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.wrong))
 
+    // Capture current word when answer is checked to prevent showing next question's answer during fadeOut
+    var capturedWord by remember { mutableStateOf(word) }
+
     LaunchedEffect(viewModel.isCorrect) {
         if (viewModel.isCorrect == false || viewModel.isCorrect == true) {
+            // Capture the current word before any state changes
+            capturedWord = word
             delay(1500) // Show correct/wrong animation
             delay(300) // Wait for fadeOut to complete
             val hasNext = viewModel.nextQuestion() // This sets isCorrect = null
@@ -167,7 +175,7 @@ fun QuizScreen(navController: NavHostController, viewModel: QuizViewModel) {
                             modifier = Modifier.fillMaxWidth().height(200.dp)
                         )
 
-                        word?.let {
+                        capturedWord?.let {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier
@@ -228,7 +236,7 @@ fun QuizScreen(navController: NavHostController, viewModel: QuizViewModel) {
                             modifier = Modifier.fillMaxWidth().height(200.dp)
                         )
 
-                        word?.let {
+                        capturedWord?.let {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier
