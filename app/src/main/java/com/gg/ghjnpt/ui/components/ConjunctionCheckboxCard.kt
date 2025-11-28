@@ -1,7 +1,5 @@
 package com.gg.ghjnpt.ui.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -16,14 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gg.ghjnpt.ui.theme.YongdalBlue
 import com.gg.ghjnpt.ui.theme.YongdalBlueAccent
-import com.gg.ghjnpt.ui.theme.YongdalBlueBackground
 import com.gg.ghjnpt.ui.theme.YongdalBlueDark
 
 @Composable
@@ -38,7 +34,7 @@ fun ConjunctionCheckboxCard(
             .fillMaxWidth()
             .clickable { onToggle() },
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) YongdalBlue.copy(alpha = 0.15f) else YongdalBlueBackground
+            containerColor = if (isSelected) YongdalBlue.copy(alpha = 0.15f) else Color.White
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isSelected) 4.dp else 2.dp
@@ -48,15 +44,6 @@ fun ConjunctionCheckboxCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .then(
-                    if (isSelected) {
-                        Modifier.border(
-                            width = 2.dp,
-                            color = YongdalBlue,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                    } else Modifier
-                )
                 .padding(horizontal = 16.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -65,7 +52,7 @@ fun ConjunctionCheckboxCard(
                 text = groupName,
                 fontSize = 16.sp,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = if (isSelected) YongdalBlueDark else Color.DarkGray
+                color = if (isSelected) YongdalBlueDark else YongdalBlue
             )
 
             Checkbox(
@@ -73,7 +60,7 @@ fun ConjunctionCheckboxCard(
                 onCheckedChange = { onToggle() },
                 colors = CheckboxDefaults.colors(
                     checkedColor = YongdalBlue,
-                    uncheckedColor = Color.Gray,
+                    uncheckedColor = YongdalBlueAccent,
                     checkmarkColor = Color.White
                 )
             )
