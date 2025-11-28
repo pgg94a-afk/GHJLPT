@@ -12,6 +12,7 @@ import com.gg.ghjnpt.ui.screens.grammar.GrammarMemorizeScreen
 import com.gg.ghjnpt.ui.screens.main.MainScreen
 import com.gg.ghjnpt.ui.screens.memorize.MemorizeScreen
 import com.gg.ghjnpt.ui.screens.quiz.QuizScreen
+import com.gg.ghjnpt.ui.screens.conjunction.ConjunctionMemorizeScreen
 import com.gg.ghjnpt.ui.theme.GHJNPTTheme
 
 class MainActivity : ComponentActivity() {
@@ -45,6 +46,9 @@ fun AppNavigation(viewModel: QuizViewModel) {
         }
         composable("grammarMemorize") {
             GrammarMemorizeScreen(navController, viewModel)
+        }
+        composable("conjunctionMemorize") {
+            ConjunctionMemorizeScreen(navController, viewModel)
         }
     }
 }

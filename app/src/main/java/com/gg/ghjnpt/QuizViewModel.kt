@@ -8,6 +8,8 @@ import com.gg.ghjnpt.data.JPWord
 import com.gg.ghjnpt.data.JPWordData
 import com.gg.ghjnpt.data.Grammar
 import com.gg.ghjnpt.data.GrammarData
+import com.gg.ghjnpt.data.Conjunction
+import com.gg.ghjnpt.data.ConjunctionData
 
 class QuizViewModel : ViewModel() {
     var words by mutableStateOf(listOf<JPWord>())
@@ -24,11 +26,19 @@ class QuizViewModel : ViewModel() {
     var difficultGrammars by mutableStateOf(setOf<Grammar>())
         private set
 
+    // ✅ 접속사 관련 데이터
+    var conjunctions by mutableStateOf(listOf<Conjunction>())
+    var difficultConjunctions by mutableStateOf(setOf<Conjunction>())
+        private set
+
     val total get() = words.size
     val currentWord get() = words.getOrNull(currentIndex)
 
     val grammarTotal get() = grammars.size
     val currentGrammar get() = grammars.getOrNull(currentIndex)
+
+    val conjunctionTotal get() = conjunctions.size
+    val currentConjunction get() = conjunctions.getOrNull(currentIndex)
 
     private val dayLevelMap = mapOf(
         1 to listOf(1, 2),
@@ -78,8 +88,18 @@ class QuizViewModel : ViewModel() {
         16 to GrammarData.Grammars16,
         17 to GrammarData.Grammars17,
         18 to GrammarData.Grammars18,
+    )
 
-
+    // ✅ 접속사 그룹 매핑
+    private val conjunctionGroupMap = mapOf(
+        "N3_순접추가" to ConjunctionData.N3_Sequential,
+        "N3_역접대조" to ConjunctionData.N3_Contradictory,
+        "N3_이유원인" to ConjunctionData.N3_Reason,
+        "N3_전환조건" to ConjunctionData.N3_Transition,
+        "N4_순접추가" to ConjunctionData.N4_Sequential,
+        "N4_역접" to ConjunctionData.N4_Contradictory,
+        "N4_이유원인" to ConjunctionData.N4_Reason,
+        "N4_전환조건" to ConjunctionData.N4_Transition,
     )
 
     fun loadSelectedWords(selectedLevels: List<Int>) {
@@ -158,5 +178,31 @@ class QuizViewModel : ViewModel() {
     // ✅ 어려운 문법인지 확인
     fun isDifficultGrammar(grammar: Grammar): Boolean {
         return grammar in difficultGrammars
+    }
+
+    // ✅ 접속사 로드
+    fun loadSelectedConjunctions(selectedGroups: List<String>) {
+        val selected = mutableListOf<Conjunction>()
+        selectedGroups.forEach { group ->
+            conjunctionGroupMap[group]?.let { selected += it }
+        }
+        conjunctions = selected.shuffled()
+        currentIndex = 0
+        userAnswer = ""
+        isCorrect = null
+    }
+
+    // ✅ 어려운 접속사 추가/제거
+    fun toggleDifficultConjunction(conjunction: Conjunction) {
+        difficultConjunctions = if (conjunction in difficultConjunctions) {
+            difficultConjunctions - conjunction
+        } else {
+            difficultConjunctions + conjunction
+        }
+    }
+
+    // ✅ 어려운 접속사인지 확인
+    fun isDifficultConjunction(conjunction: Conjunction): Boolean {
+        return conjunction in difficultConjunctions
     }
 }

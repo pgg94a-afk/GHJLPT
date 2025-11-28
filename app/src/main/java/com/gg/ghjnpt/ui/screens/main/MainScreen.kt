@@ -32,6 +32,7 @@ import androidx.navigation.NavHostController
 import com.gg.ghjnpt.QuizViewModel
 import com.gg.ghjnpt.ui.components.DaySection
 import com.gg.ghjnpt.ui.components.GrammarCheckboxCard
+import com.gg.ghjnpt.ui.components.ConjunctionCheckboxCard
 import com.gg.ghjnpt.ui.theme.YongdalBlue
 import com.gg.ghjnpt.ui.theme.YongdalBlueAccent
 import com.gg.ghjnpt.ui.theme.YongdalBlueDark
@@ -42,6 +43,16 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
     var selectedTab by remember { mutableStateOf(0) }
     var selectedWordLevels by remember { mutableStateOf(List(17) { false }) }
     var selectedGrammarLevels by remember { mutableStateOf(List(18) { false }) }
+    var selectedConjunctionGroups by remember { mutableStateOf(mapOf(
+        "N3_순접추가" to false,
+        "N3_역접대조" to false,
+        "N3_이유원인" to false,
+        "N3_전환조건" to false,
+        "N4_순접추가" to false,
+        "N4_역접" to false,
+        "N4_이유원인" to false,
+        "N4_전환조건" to false,
+    )) }
 
     val scrollBackgroundColor = YongdalBlueSurface
 
@@ -81,7 +92,7 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                     Text("단어", color = Color.White)
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(8.dp))
 
                 Button(
                     onClick = { selectedTab = 1 },
@@ -91,6 +102,18 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                     )
                 ) {
                     Text("문법", color = Color.White)
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Button(
+                    onClick = { selectedTab = 2 },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedTab == 2) YongdalBlue else Color.LightGray
+                    )
+                ) {
+                    Text("접속사", color = Color.White)
                 }
             }
 
@@ -186,7 +209,7 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                                 )
                             }
                         }
-                    } else {
+                    } else if (selectedTab == 1) {
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -201,6 +224,39 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                                     onToggle = {
                                         selectedGrammarLevels = selectedGrammarLevels.mapIndexed { i, selected ->
                                             if (i == index) !selected else selected
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    } else {
+                        // 접속사 탭
+                        val conjunctionGroupsData = listOf(
+                            "N3 순접·추가" to "N3_순접추가",
+                            "N3 역접·대조" to "N3_역접대조",
+                            "N3 이유·원인" to "N3_이유원인",
+                            "N3 전환·조건" to "N3_전환조건",
+                            "N4 순접·추가" to "N4_순접추가",
+                            "N4 역접" to "N4_역접",
+                            "N4 이유·원인" to "N4_이유원인",
+                            "N4 전환·조건" to "N4_전환조건",
+                        )
+
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(conjunctionGroupsData.size) { index ->
+                                val (groupName, groupKey) = conjunctionGroupsData[index]
+                                ConjunctionCheckboxCard(
+                                    groupName = groupName,
+                                    groupKey = groupKey,
+                                    isSelected = selectedConjunctionGroups[groupKey] ?: false,
+                                    onToggle = {
+                                        selectedConjunctionGroups = selectedConjunctionGroups.toMutableMap().apply {
+                                            this[groupKey] = !(selectedConjunctionGroups[groupKey] ?: false)
                                         }
                                     }
                                 )
@@ -253,7 +309,7 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                     ) {
                         Text("암기 모드")
                     }
-                } else {
+                } else if (selectedTab == 1) {
                     Button(
                         onClick = {
                             val selected = selectedGrammarLevels.mapIndexedNotNull { index, isSelected ->
@@ -262,6 +318,22 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                             if (selected.isNotEmpty()) {
                                 viewModel.loadSelectedGrammars(selected)
                                 navController.navigate("grammarMemorize")
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = YongdalBlueAccent
+                        )
+                    ) {
+                        Text("암기하기")
+                    }
+                } else {
+                    Button(
+                        onClick = {
+                            val selected = selectedConjunctionGroups.filterValues { it }.keys.toList()
+                            if (selected.isNotEmpty()) {
+                                viewModel.loadSelectedConjunctions(selected)
+                                navController.navigate("conjunctionMemorize")
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
