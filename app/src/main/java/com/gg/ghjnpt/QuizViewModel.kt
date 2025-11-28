@@ -144,12 +144,14 @@ class QuizViewModel : ViewModel() {
         isCorrect = correct
     }
 
-    fun nextQuestion() {
+    fun nextQuestion(): Boolean {
         if (currentIndex < total - 1) {
             currentIndex++
             userAnswer = ""
             isCorrect = null
+            return true
         }
+        return false
     }
 
     // ✅ 어려운 단어 추가/제거
