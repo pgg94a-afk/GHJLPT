@@ -98,7 +98,7 @@ fun ConjunctionMemorizeCard(
                     ) {
                         Text(
                             text = conjunction.meaning,
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             color = YongdalBlueDark
                         )
@@ -106,7 +106,7 @@ fun ConjunctionMemorizeCard(
                             text = conjunction.description,
                             fontSize = 12.sp,
                             color = YongdalBlue,
-                            modifier = Modifier.padding(top = 4.dp)
+                            modifier = Modifier.padding(top = 2.dp)
                         )
                         Text(
                             text = "분류: ${conjunction.category}",
