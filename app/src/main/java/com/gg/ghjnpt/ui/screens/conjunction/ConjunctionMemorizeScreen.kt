@@ -185,7 +185,10 @@ fun ConjunctionMemorizeScreen(navController: NavHostController, viewModel: QuizV
                 ) {
                     items(
                         count = displayConjunctions.size,
-                        key = { index -> "${displayConjunctions[index].japanese}_${displayConjunctions[index].category}" }
+                        key = { index ->
+                            val conjunction = displayConjunctions[index]
+                            "${conjunction.japanese}_${conjunction.category}_${viewModel.conjunctions.indexOf(conjunction)}"
+                        }
                     ) { index ->
                         val conjunction = displayConjunctions[index]
                         val originalIndex = viewModel.conjunctions.indexOf(conjunction)

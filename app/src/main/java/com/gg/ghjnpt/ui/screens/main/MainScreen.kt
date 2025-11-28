@@ -262,7 +262,10 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                                 )
                             }
 
-                            items(n3Groups.size) { index ->
+                            items(
+                                count = n3Groups.size,
+                                key = { index -> n3Groups[index].second }
+                            ) { index ->
                                 val (groupName, groupKey) = n3Groups[index]
                                 ConjunctionCheckboxCard(
                                     groupName = groupName,
@@ -287,7 +290,10 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                                 )
                             }
 
-                            items(n4Groups.size) { index ->
+                            items(
+                                count = n4Groups.size,
+                                key = { index -> n4Groups[index].second }
+                            ) { index ->
                                 val (groupName, groupKey) = n4Groups[index]
                                 ConjunctionCheckboxCard(
                                     groupName = groupName,

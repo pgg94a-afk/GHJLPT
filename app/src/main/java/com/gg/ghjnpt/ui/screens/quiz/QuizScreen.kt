@@ -52,9 +52,13 @@ fun QuizScreen(navController: NavHostController, viewModel: QuizViewModel) {
     LaunchedEffect(viewModel.isCorrect) {
         if (viewModel.isCorrect == false) {
             delay(3500)
+            viewModel.isCorrect = null // Start fadeOut animation
+            delay(300) // Wait for fadeOut to complete
             viewModel.nextQuestion()
         } else if (viewModel.isCorrect == true) {
             delay(2000)
+            viewModel.isCorrect = null // Start fadeOut animation
+            delay(300) // Wait for fadeOut to complete
             viewModel.nextQuestion()
         }
     }
