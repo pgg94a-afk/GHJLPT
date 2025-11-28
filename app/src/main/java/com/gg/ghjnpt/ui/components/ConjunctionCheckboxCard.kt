@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -21,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.gg.ghjnpt.ui.theme.YongdalBlue
 import com.gg.ghjnpt.ui.theme.YongdalBlueAccent
 import com.gg.ghjnpt.ui.theme.YongdalBlueDark
+import com.gg.ghjnpt.ui.theme.YongdalBlueLight
 
 @Composable
 fun ConjunctionCheckboxCard(
@@ -34,17 +34,19 @@ fun ConjunctionCheckboxCard(
             .fillMaxWidth()
             .clickable { onToggle() },
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) YongdalBlue.copy(alpha = 0.15f) else Color.White
+            containerColor = if (isSelected)
+                YongdalBlueLight
+            else
+                Color.White
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isSelected) 4.dp else 2.dp
-        ),
-        shape = RoundedCornerShape(12.dp)
+        )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -60,8 +62,7 @@ fun ConjunctionCheckboxCard(
                 onCheckedChange = { onToggle() },
                 colors = CheckboxDefaults.colors(
                     checkedColor = YongdalBlue,
-                    uncheckedColor = YongdalBlueAccent,
-                    checkmarkColor = Color.White
+                    uncheckedColor = YongdalBlueAccent
                 )
             )
         }
