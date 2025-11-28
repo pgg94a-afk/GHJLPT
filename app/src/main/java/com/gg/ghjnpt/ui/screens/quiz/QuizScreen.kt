@@ -50,20 +50,10 @@ fun QuizScreen(navController: NavHostController, viewModel: QuizViewModel) {
     val wrongComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.wrong))
 
     LaunchedEffect(viewModel.isCorrect) {
-        if (viewModel.isCorrect == false) {
-            delay(1500)
-            viewModel.isCorrect = null // Start fadeOut animation
+        if (viewModel.isCorrect == false || viewModel.isCorrect == true) {
+            delay(1500) // Show correct/wrong animation
             delay(300) // Wait for fadeOut to complete
-            val hasNext = viewModel.nextQuestion()
-            if (!hasNext) {
-                delay(300)
-                navController.popBackStack()
-            }
-        } else if (viewModel.isCorrect == true) {
-            delay(1500)
-            viewModel.isCorrect = null // Start fadeOut animation
-            delay(300) // Wait for fadeOut to complete
-            val hasNext = viewModel.nextQuestion()
+            val hasNext = viewModel.nextQuestion() // This sets isCorrect = null
             if (!hasNext) {
                 delay(300)
                 navController.popBackStack()
