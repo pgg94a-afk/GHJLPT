@@ -54,12 +54,20 @@ fun QuizScreen(navController: NavHostController, viewModel: QuizViewModel) {
             delay(1500)
             viewModel.isCorrect = null // Start fadeOut animation
             delay(300) // Wait for fadeOut to complete
-            viewModel.nextQuestion()
+            val hasNext = viewModel.nextQuestion()
+            if (!hasNext) {
+                delay(300)
+                navController.popBackStack()
+            }
         } else if (viewModel.isCorrect == true) {
             delay(1500)
             viewModel.isCorrect = null // Start fadeOut animation
             delay(300) // Wait for fadeOut to complete
-            viewModel.nextQuestion()
+            val hasNext = viewModel.nextQuestion()
+            if (!hasNext) {
+                delay(300)
+                navController.popBackStack()
+            }
         }
     }
 
