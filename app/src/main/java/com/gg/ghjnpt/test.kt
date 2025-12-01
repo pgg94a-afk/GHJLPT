@@ -270,6 +270,15 @@ fun wordQuizMode() {
         return
     }
 
+    // 정답 체크 방식 선택
+    println("\n정답 체크 방식을 선택하세요:")
+    println("1. AI 정답 체크 (유사한 답변도 인정)")
+    println("2. 표준 형식 (히라가나 한글발음 - 뜻)")
+    print("선택 (1 또는 2): ")
+
+    val answerCheckMode = readLine()?.trim() ?: "1"
+    val useAI = answerCheckMode == "1"
+
     val words = selectedWords.values.flatten()
     val corrects = mutableListOf<JPWord>()
     val wrongs = mutableListOf<JPWord>()
@@ -285,27 +294,39 @@ fun wordQuizMode() {
 
         val answer = readLine()?.trim() ?: ""
 
-        // AI를 이용한 답변 평가
-        println("\n🤖 AI가 답변을 평가하는 중...")
-        val evaluation = AIAnswerChecker.evaluateAnswer(
-            japaneseWord = word.word,
-            correctMeaning = word.meaning,
-            userAnswer = answer
-        )
+        if (useAI) {
+            // AI를 이용한 답변 평가
+            println("\n🤖 AI가 답변을 평가하는 중...")
+            val evaluation = AIAnswerChecker.evaluateAnswer(
+                japaneseWord = word.word,
+                correctMeaning = word.meaning,
+                userAnswer = answer
+            )
 
-        println("\n📊 평가 결과:")
-        println("  정확도: ${evaluation.accuracy}%")
-        println("  이유: ${evaluation.reason}")
-        println("  예문: ${evaluation.example}")
-        println("  정답: ${word.kana} : ${word.meaning} : ${word.koreanPronounce}")
+            println("\n📊 평가 결과:")
+            println("  정확도: ${evaluation.accuracy}%")
+            println("  이유: ${evaluation.reason}")
+            println("  예문: ${evaluation.example}")
+            println("  정답: ${word.kana} ${word.koreanPronounce} - ${word.meaning}")
 
-        // 80% 이상이면 정답으로 인정
-        if (evaluation.accuracy >= 80) {
-            println("✅ 정답으로 인정합니다!")
-            corrects.add(word)
+            // 80% 이상이면 정답으로 인정
+            if (evaluation.accuracy >= 80) {
+                println("✅ 정답으로 인정합니다!")
+                corrects.add(word)
+            } else {
+                println("❌ 오답입니다.")
+                wrongs.add(word)
+            }
         } else {
-            println("❌ 오답입니다.")
-            wrongs.add(word)
+            // 표준 형식: "히라가나 한글발음 - 뜻"
+            val correctAnswer = "${word.kana} ${word.koreanPronounce} - ${word.meaning}"
+            if (answer == correctAnswer) {
+                println("✅ 정답!")
+                corrects.add(word)
+            } else {
+                println("❌ 오답! 정답은: $correctAnswer")
+                wrongs.add(word)
+            }
         }
     }
 
@@ -322,7 +343,7 @@ fun wordQuizMode() {
         println("-".repeat(50))
         wrongs.forEach {
             println("${it.word}")
-            println("  ➜ ${it.kana} : ${it.meaning} : ${it.koreanPronounce}")
+            println("  ➜ ${it.kana} ${it.koreanPronounce} - ${it.meaning}")
         }
     }
 
