@@ -273,7 +273,7 @@ fun wordQuizMode() {
     // 정답 체크 방식 선택
     println("\n정답 체크 방식을 선택하세요:")
     println("1. AI 정답 체크 (유사한 답변도 인정)")
-    println("2. 표준 형식 (히라가나 한글발음 - 뜻)")
+    println("2. 표준 형식 (한글발음 - 뜻)")
     print("선택 (1 또는 2): ")
 
     val answerCheckMode = readLine()?.trim() ?: "1"
@@ -318,8 +318,8 @@ fun wordQuizMode() {
                 wrongs.add(word)
             }
         } else {
-            // 표준 형식: "히라가나 한글발음 - 뜻"
-            val correctAnswer = "${word.kana} ${word.koreanPronounce} - ${word.meaning}"
+            // 표준 형식: "한글발음 - 뜻"
+            val correctAnswer = "${word.koreanPronounce} - ${word.meaning}"
             if (answer == correctAnswer) {
                 println("✅ 정답!")
                 corrects.add(word)
