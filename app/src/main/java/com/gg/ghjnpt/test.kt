@@ -319,7 +319,7 @@ fun wordQuizMode() {
             }
         } else {
             // 표준 형식: "히라가나 한글발음 - 뜻"
-            val correctAnswer = "${word.kana} ${word.koreanPronounce} - ${word.meaning}"
+            val correctAnswer = "${word.koreanPronounce} - ${word.meaning}"
             if (answer == correctAnswer) {
                 println("✅ 정답!")
                 corrects.add(word)
