@@ -343,7 +343,7 @@ fun wordQuizMode() {
         println("-".repeat(50))
         wrongs.forEach {
             println("${it.word}")
-            println("  ➜ ${it.kana} ${it.koreanPronounce} - ${it.meaning}")
+            println("  ➜ ${it.kana} : ${it.koreanPronounce} : ${it.meaning}")
         }
     }
 
