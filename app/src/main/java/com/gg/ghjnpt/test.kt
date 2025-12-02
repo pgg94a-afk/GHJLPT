@@ -321,10 +321,10 @@ fun wordQuizMode() {
             // 표준 형식: "히라가나 한글발음 - 뜻"
             val correctAnswer = "${word.koreanPronounce} - ${word.meaning}"
             if (answer == correctAnswer) {
-                println("✅ 정답!")
+                println("✅ 정답! :: ${word.word}: ${word.meaning} ${word.kana} ${word.koreanPronounce}")
                 corrects.add(word)
             } else {
-                println("❌ 오답! 정답은: $correctAnswer")
+                println("❌ 오답! :: ${word.word}: ${word.meaning} ${word.kana} ${word.koreanPronounce}")
                 wrongs.add(word)
             }
         }
