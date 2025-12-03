@@ -622,10 +622,8 @@ fun keigoQuizMode() {
 
         // 존경어 입력
         if (songyeongeo != null) {
-            print("존경어를 입력하세요: ")
             val songyeongeoAnswer = readLine()?.trim() ?: ""
 
-            print("존경어 한글발음 - 뜻을 입력하세요: ")
             val songyeongeoPronounce = readLine()?.trim() ?: ""
 
             val correctPronounce = "${songyeongeo.koreanPronounce} - ${songyeongeo.meaning}"
@@ -637,10 +635,8 @@ fun keigoQuizMode() {
 
         // 겸양어 입력
         if (gyeomyangeo != null) {
-            print("겸양어를 입력하세요: ")
             val gyeomyangeoAnswer = readLine()?.trim() ?: ""
 
-            print("겸양어 한글발음 - 뜻을 입력하세요: ")
             val gyeomyangeoPronounce = readLine()?.trim() ?: ""
 
             val correctPronounce = "${gyeomyangeo.koreanPronounce} - ${gyeomyangeo.meaning}"
