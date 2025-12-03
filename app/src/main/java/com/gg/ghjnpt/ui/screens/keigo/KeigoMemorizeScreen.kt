@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
@@ -189,6 +190,16 @@ fun KeigoMemorizeScreen(navController: NavHostController, viewModel: QuizViewMod
                     ) { index ->
                         val keigo = displayKeigos[index]
                         val originalIndex = viewModel.keigos.indexOf(keigo)
+
+                        // 세트 구분선 (기본형이 나타날 때마다, 첫 번째가 아니면)
+                        if (index > 0 && keigo.type == "기본형") {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            HorizontalDivider(
+                                thickness = 2.dp,
+                                color = YongdalBlue.copy(alpha = 0.3f)
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
 
                         KeigoMemorizeCard(
                             keigo = keigo,
