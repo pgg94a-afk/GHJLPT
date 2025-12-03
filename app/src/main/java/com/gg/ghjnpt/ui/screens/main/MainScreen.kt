@@ -16,6 +16,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -76,57 +78,35 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            Row(
+            ScrollableTabRow(
+                selectedTabIndex = selectedTab,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.Center
+                containerColor = YongdalBlueSurface,
+                contentColor = YongdalBlueDark,
+                edgePadding = 0.dp
             ) {
-                Button(
+                Tab(
+                    selected = selectedTab == 0,
                     onClick = { selectedTab = 0 },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (selectedTab == 0) YongdalBlue else Color.LightGray
-                    )
-                ) {
-                    Text("단어", color = Color.White)
-                }
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Button(
+                    text = { Text("단어") }
+                )
+                Tab(
+                    selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (selectedTab == 1) YongdalBlue else Color.LightGray
-                    )
-                ) {
-                    Text("문법", color = Color.White)
-                }
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Button(
+                    text = { Text("문법") }
+                )
+                Tab(
+                    selected = selectedTab == 2,
                     onClick = { selectedTab = 2 },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (selectedTab == 2) YongdalBlue else Color.LightGray
-                    )
-                ) {
-                    Text("접속사", color = Color.White)
-                }
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Button(
+                    text = { Text("접속사") }
+                )
+                Tab(
+                    selected = selectedTab == 3,
                     onClick = { selectedTab = 3 },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (selectedTab == 3) YongdalBlue else Color.LightGray
-                    )
-                ) {
-                    Text("경어", color = Color.White)
-                }
+                    text = { Text("경어") }
+                )
             }
 
             Box(

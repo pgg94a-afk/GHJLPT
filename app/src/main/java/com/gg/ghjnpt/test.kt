@@ -5,6 +5,8 @@ import com.gg.ghjnpt.data.Grammar
 import com.gg.ghjnpt.data.GrammarData
 import com.gg.ghjnpt.data.JPWord
 import com.gg.ghjnpt.data.JPWordData
+import com.gg.ghjnpt.data.KeigoExpression
+import com.gg.ghjnpt.data.KeigoData
 
 fun main() {
     println("=".repeat(50))
@@ -14,15 +16,17 @@ fun main() {
     println("\n학습 유형을 선택하세요:")
     println("1. 문법 학습")
     println("2. 단어 학습")
-    println("3. 접속사 학습")  // 추가
-    print("선택 (1, 2 또는 3): ")
+    println("3. 접속사 학습")
+    println("4. 경어 학습")
+    print("선택 (1, 2, 3 또는 4): ")
 
     val studyType = readLine()?.trim()
 
     when (studyType) {
         "1" -> grammarStudy()
         "2" -> wordStudy()
-        "3" -> conjunctionStudy()  // 추가
+        "3" -> conjunctionStudy()
+        "4" -> keigoStudy()
         else -> {
             println("잘못된 입력입니다. 프로그램을 종료합니다.")
             return
@@ -528,6 +532,178 @@ fun conjunctionQuizMode() {
             println("${it.japanese}")
             println("  ➜ ${it.meaning}")
             println("  💡 ${it.description}")
+        }
+    }
+
+    println("\n" + "=".repeat(50))
+}
+
+fun keigoStudy() {
+    println("\n모드를 선택하세요:")
+    println("1. 암기 모드")
+    println("2. 퀴즈 모드")
+    print("선택 (1 또는 2): ")
+
+    val mode = readLine()?.trim()
+
+    when (mode) {
+        "1" -> keigoMemorizeMode()
+        "2" -> keigoQuizMode()
+        else -> {
+            println("잘못된 입력입니다.")
+            return
+        }
+    }
+}
+
+fun keigoMemorizeMode() {
+    println("\n📚 경어 암기 모드를 시작합니다.")
+
+    val keigos = KeigoData.keigo1
+    val totalCount = keigos.size
+
+    println("\n총 ${totalCount}개의 경어 표현을 표시합니다.")
+    println("=".repeat(50))
+
+    // 기본형별로 그룹화
+    val groupedKeigos = keigos.groupBy {
+        keigos.find { k -> k.type == "기본형" && k.meaning.contains(it.meaning.split(" ")[0]) }?.meaning ?: it.meaning
+    }
+
+    groupedKeigos.forEach { (baseForm, expressions) ->
+        val basicForm = expressions.find { it.type == "기본형" }
+        if (basicForm != null) {
+            println("\n[$baseForm] ${"―".repeat(40)}")
+            println("  기본형: ${basicForm.japanese} (${basicForm.hiragana}) - ${basicForm.koreanPronounce}")
+            println()
+
+            expressions.filter { it.type != "기본형" }.forEach { exp ->
+                println("  [${exp.type}]")
+                println("    ${exp.japanese} (${exp.hiragana})")
+                println("    ${exp.koreanPronounce} - ${exp.meaning}")
+                println()
+            }
+        }
+    }
+
+    println("=".repeat(50))
+    println("암기 모드를 종료합니다.")
+}
+
+fun keigoQuizMode() {
+    println("\n✏️ 경어 퀴즈 모드를 시작합니다.")
+
+    val keigos = KeigoData.keigo1
+
+    // 기본형별로 그룹화
+    val basicForms = keigos.filter { it.type == "기본형" }
+
+    val corrects = mutableListOf<String>()
+    val wrongs = mutableListOf<String>()
+
+    println("\n총 ${basicForms.size}개의 문제가 출제됩니다.")
+    println("=".repeat(50))
+
+    basicForms.forEachIndexed { id, basicForm ->
+        val index = (id + 1).toString().padStart(2, '0')
+
+        // 해당 기본형에 대한 존경어와 겸양어 찾기
+        val songyeongeo = keigos.find {
+            it.meaning.contains(basicForm.meaning.split(" ")[0]) &&
+            it.type.contains("존경어")
+        }
+        val gyeomyangeo = keigos.find {
+            it.meaning.contains(basicForm.meaning.split(" ")[0]) &&
+            it.type.contains("겸양어")
+        }
+
+        println("\n[$index] 기본형: ${basicForm.japanese} (${basicForm.hiragana}) - ${basicForm.meaning}")
+        println("-".repeat(50))
+
+        var allCorrect = true
+
+        // 존경어 입력
+        if (songyeongeo != null) {
+            print("존경어를 입력하세요: ")
+            val songyeongeoAnswer = readLine()?.trim() ?: ""
+
+            print("존경어 한글발음 - 뜻을 입력하세요: ")
+            val songyeongeoPronounce = readLine()?.trim() ?: ""
+
+            val correctPronounce = "${songyeongeo.koreanPronounce} - ${songyeongeo.meaning}"
+
+            if (songyeongeoAnswer != songyeongeo.japanese || songyeongeoPronounce != correctPronounce) {
+                allCorrect = false
+            }
+        }
+
+        // 겸양어 입력
+        if (gyeomyangeo != null) {
+            print("겸양어를 입력하세요: ")
+            val gyeomyangeoAnswer = readLine()?.trim() ?: ""
+
+            print("겸양어 한글발음 - 뜻을 입력하세요: ")
+            val gyeomyangeoPronounce = readLine()?.trim() ?: ""
+
+            val correctPronounce = "${gyeomyangeo.koreanPronounce} - ${gyeomyangeo.meaning}"
+
+            if (gyeomyangeoAnswer != gyeomyangeo.japanese || gyeomyangeoPronounce != correctPronounce) {
+                allCorrect = false
+            }
+        }
+
+        // 결과 출력
+        println()
+        if (allCorrect) {
+            println("✅ 정답!")
+            corrects.add(basicForm.japanese)
+        } else {
+            println("❌ 오답!")
+            wrongs.add(basicForm.japanese)
+        }
+
+        println("-".repeat(50))
+        if (songyeongeo != null) {
+            println("존경어: ${songyeongeo.japanese} - ${songyeongeo.koreanPronounce} : ${songyeongeo.meaning}")
+        }
+        if (gyeomyangeo != null) {
+            println("겸양어: ${gyeomyangeo.japanese} - ${gyeomyangeo.koreanPronounce} : ${gyeomyangeo.meaning}")
+        }
+        println("-".repeat(50))
+    }
+
+    println("\n" + "=".repeat(50))
+    println("📊 퀴즈 결과")
+    println("=".repeat(50))
+    println("총 문제 수: ${basicForms.size}")
+    println("정답 수: ${corrects.size}")
+    println("오답 수: ${wrongs.size}")
+    println("정답률: ${String.format("%.1f", (corrects.size.toFloat() / basicForms.size.toFloat()) * 100)}%")
+
+    if (wrongs.isNotEmpty()) {
+        println("\n👻 오답노트 👻")
+        println("-".repeat(50))
+        wrongs.forEach { wrong ->
+            val basicForm = keigos.find { it.japanese == wrong && it.type == "기본형" }
+            if (basicForm != null) {
+                println("\n${basicForm.japanese} (${basicForm.meaning})")
+
+                val songyeongeo = keigos.find {
+                    it.meaning.contains(basicForm.meaning.split(" ")[0]) &&
+                    it.type.contains("존경어")
+                }
+                val gyeomyangeo = keigos.find {
+                    it.meaning.contains(basicForm.meaning.split(" ")[0]) &&
+                    it.type.contains("겸양어")
+                }
+
+                if (songyeongeo != null) {
+                    println("  존경어: ${songyeongeo.japanese} - ${songyeongeo.koreanPronounce} : ${songyeongeo.meaning}")
+                }
+                if (gyeomyangeo != null) {
+                    println("  겸양어: ${gyeomyangeo.japanese} - ${gyeomyangeo.koreanPronounce} : ${gyeomyangeo.meaning}")
+                }
+            }
         }
     }
 
