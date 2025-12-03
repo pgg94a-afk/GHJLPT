@@ -13,6 +13,7 @@ import com.gg.ghjnpt.ui.screens.main.MainScreen
 import com.gg.ghjnpt.ui.screens.memorize.MemorizeScreen
 import com.gg.ghjnpt.ui.screens.quiz.QuizScreen
 import com.gg.ghjnpt.ui.screens.conjunction.ConjunctionMemorizeScreen
+import com.gg.ghjnpt.ui.screens.keigo.KeigoMemorizeScreen
 import com.gg.ghjnpt.ui.theme.GHJNPTTheme
 
 class MainActivity : ComponentActivity() {
@@ -49,6 +50,9 @@ fun AppNavigation(viewModel: QuizViewModel) {
         }
         composable("conjunctionMemorize") {
             ConjunctionMemorizeScreen(navController, viewModel)
+        }
+        composable("keigoMemorize") {
+            KeigoMemorizeScreen(navController, viewModel)
         }
     }
 }

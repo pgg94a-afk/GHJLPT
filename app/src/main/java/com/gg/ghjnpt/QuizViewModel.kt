@@ -10,6 +10,8 @@ import com.gg.ghjnpt.data.Grammar
 import com.gg.ghjnpt.data.GrammarData
 import com.gg.ghjnpt.data.Conjunction
 import com.gg.ghjnpt.data.ConjunctionData
+import com.gg.ghjnpt.data.KeigoExpression
+import com.gg.ghjnpt.data.KeigoData
 
 class QuizViewModel : ViewModel() {
     var words by mutableStateOf(listOf<JPWord>())
@@ -29,6 +31,11 @@ class QuizViewModel : ViewModel() {
     // ✅ 접속사 관련 데이터
     var conjunctions by mutableStateOf(listOf<Conjunction>())
     var difficultConjunctions by mutableStateOf(setOf<Conjunction>())
+        private set
+
+    // ✅ 경어 관련 데이터
+    var keigos by mutableStateOf(listOf<KeigoExpression>())
+    var difficultKeigos by mutableStateOf(setOf<KeigoExpression>())
         private set
 
     val total get() = words.size
@@ -206,5 +213,45 @@ class QuizViewModel : ViewModel() {
     // ✅ 어려운 접속사인지 확인
     fun isDifficultConjunction(conjunction: Conjunction): Boolean {
         return conjunction in difficultConjunctions
+    }
+
+    // ✅ 경어 로드 (세트 단위로 랜덤 섞기)
+    fun loadSelectedKeigos() {
+        val allKeigos = KeigoData.keigo1
+
+        // 기본형을 기준으로 세트 구분
+        val sets = mutableListOf<List<KeigoExpression>>()
+        var currentSet = mutableListOf<KeigoExpression>()
+
+        allKeigos.forEach { keigo ->
+            if (keigo.type == "기본형" && currentSet.isNotEmpty()) {
+                sets.add(currentSet)
+                currentSet = mutableListOf()
+            }
+            currentSet.add(keigo)
+        }
+        if (currentSet.isNotEmpty()) {
+            sets.add(currentSet)
+        }
+
+        // 세트를 섞고 평탄화
+        keigos = sets.shuffled().flatten()
+        currentIndex = 0
+        userAnswer = ""
+        isCorrect = null
+    }
+
+    // ✅ 어려운 경어 추가/제거
+    fun toggleDifficultKeigo(keigo: KeigoExpression) {
+        difficultKeigos = if (keigo in difficultKeigos) {
+            difficultKeigos - keigo
+        } else {
+            difficultKeigos + keigo
+        }
+    }
+
+    // ✅ 어려운 경어인지 확인
+    fun isDifficultKeigo(keigo: KeigoExpression): Boolean {
+        return keigo in difficultKeigos
     }
 }
