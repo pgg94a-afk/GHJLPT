@@ -27,5 +27,6 @@ data class KeigoExpression(
     val meaning: String,        // 뜻 (예: 가겠습니다)
     val hiragana: String,       // 히라가나 (예: まいります)
     val koreanPronounce: String,// 한글 발음 (예: 마이리마스)
-    val type: String            // 형태 (예: 겸양어, 존경어, 수혜형, 기본형)
+    val type: String,           // 형태 (예: 겸양어, 존경어, 수혜형, 기본형)
+    val baseFormId: Int = 0     // 기본형 ID (1=하다, 2=가다, ...)
 )

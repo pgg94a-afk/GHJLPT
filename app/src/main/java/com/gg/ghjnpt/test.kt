@@ -565,15 +565,13 @@ fun keigoMemorizeMode() {
     println("\n총 ${totalCount}개의 경어 표현을 표시합니다.")
     println("=".repeat(50))
 
-    // 기본형별로 그룹화
-    val groupedKeigos = keigos.groupBy {
-        keigos.find { k -> k.type == "기본형" && k.meaning.contains(it.meaning.split(" ")[0]) }?.meaning ?: it.meaning
-    }
+    // 기본형별로 그룹화 (baseFormId 사용)
+    val groupedKeigos = keigos.groupBy { it.baseFormId }
 
-    groupedKeigos.forEach { (baseForm, expressions) ->
+    groupedKeigos.toSortedMap().forEach { (baseFormId, expressions) ->
         val basicForm = expressions.find { it.type == "기본형" }
         if (basicForm != null) {
-            println("\n[$baseForm] ${"―".repeat(40)}")
+            println("\n[${basicForm.meaning}] ${"―".repeat(40)}")
             println("  기본형: ${basicForm.japanese} (${basicForm.hiragana}) - ${basicForm.koreanPronounce}")
             println()
 
@@ -607,13 +605,13 @@ fun keigoQuizMode() {
     basicForms.forEachIndexed { id, basicForm ->
         val index = (id + 1).toString().padStart(2, '0')
 
-        // 해당 기본형에 대한 존경어와 겸양어 찾기
+        // 해당 기본형에 대한 존경어와 겸양어 찾기 (baseFormId 사용)
         val songyeongeo = keigos.find {
-            it.meaning.contains(basicForm.meaning.split(" ")[0]) &&
+            it.baseFormId == basicForm.baseFormId &&
             it.type.contains("존경어")
         }
         val gyeomyangeo = keigos.find {
-            it.meaning.contains(basicForm.meaning.split(" ")[0]) &&
+            it.baseFormId == basicForm.baseFormId &&
             it.type.contains("겸양어")
         }
 
@@ -689,11 +687,11 @@ fun keigoQuizMode() {
                 println("\n${basicForm.japanese} (${basicForm.meaning})")
 
                 val songyeongeo = keigos.find {
-                    it.meaning.contains(basicForm.meaning.split(" ")[0]) &&
+                    it.baseFormId == basicForm.baseFormId &&
                     it.type.contains("존경어")
                 }
                 val gyeomyangeo = keigos.find {
-                    it.meaning.contains(basicForm.meaning.split(" ")[0]) &&
+                    it.baseFormId == basicForm.baseFormId &&
                     it.type.contains("겸양어")
                 }
 
