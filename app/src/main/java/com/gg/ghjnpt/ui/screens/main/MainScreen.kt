@@ -115,6 +115,18 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                 ) {
                     Text("접속사", color = Color.White)
                 }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Button(
+                    onClick = { selectedTab = 3 },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedTab == 3) YongdalBlue else Color.LightGray
+                    )
+                ) {
+                    Text("경어", color = Color.White)
+                }
             }
 
             Box(
@@ -206,6 +218,24 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                                             if (i == level - 1) !selected else selected
                                         }
                                     }
+                                )
+                            }
+                        }
+                    } else if (selectedTab == 3) {
+                        // 경어 탭
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            item {
+                                Text(
+                                    text = "경어 표현",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = YongdalBlueDark,
+                                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
                                 )
                             }
                         }
@@ -372,7 +402,7 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                     ) {
                         Text("암기하기")
                     }
-                } else {
+                } else if (selectedTab == 2) {
                     Button(
                         onClick = {
                             val selected = selectedConjunctionGroups.filterValues { it }.keys.toList()
@@ -380,6 +410,19 @@ fun MainScreen(navController: NavHostController, viewModel: QuizViewModel) {
                                 viewModel.loadSelectedConjunctions(selected)
                                 navController.navigate("conjunctionMemorize")
                             }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = YongdalBlueAccent
+                        )
+                    ) {
+                        Text("암기하기")
+                    }
+                } else if (selectedTab == 3) {
+                    Button(
+                        onClick = {
+                            viewModel.loadSelectedKeigos()
+                            navController.navigate("keigoMemorize")
                         },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
