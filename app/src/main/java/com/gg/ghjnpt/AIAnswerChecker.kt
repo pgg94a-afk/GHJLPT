@@ -9,6 +9,11 @@ data class AnswerEvaluation(
     val example: String
 )
 
+data class ExampleSentence(
+    val sentence: String,
+    val correctMeaning: String
+)
+
 object AIAnswerChecker {
     private val API_KEY = BuildConfig.GEMINI_API_KEY
     private const val API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
@@ -41,6 +46,67 @@ object AIAnswerChecker {
 
             val response = callGeminiAPI(prompt)
             parseEvaluation(response)
+        } catch (e: Exception) {
+            AnswerEvaluation(
+                accuracy = 0,
+                reason = "AI 평가 중 오류가 발생했습니다: ${e.message}",
+                example = ""
+            )
+        }
+    }
+
+    fun generateExampleSentence(
+        japaneseWord: String,
+        correctMeaning: String
+    ): ExampleSentence {
+        return try {
+            val prompt = """
+                일본어 단어: $japaneseWord
+                뜻: $correctMeaning
+
+                위 일본어 단어를 사용하여 JLPT N3 수준의 간단한 일본어 예문을 하나 만들어주세요.
+                예문은 일본어로만 작성하고, 한글 발음이나 해석은 포함하지 마세요.
+
+                다음 형식으로 응답해주세요:
+                예문: [일본어 예문]
+                정답해석: [예문의 한글 해석]
+
+                형식을 정확히 지켜서 응답해주세요.
+            """.trimIndent()
+
+            val response = callGeminiAPI(prompt)
+            parseExampleSentence(response)
+        } catch (e: Exception) {
+            ExampleSentence(
+                sentence = "예문 생성 중 오류가 발생했습니다: ${e.message}",
+                correctMeaning = ""
+            )
+        }
+    }
+
+    fun evaluateExampleInterpretation(
+        exampleSentence: String,
+        correctMeaning: String,
+        userInterpretation: String
+    ): AnswerEvaluation {
+        return try {
+            val prompt = """
+                예문: $exampleSentence
+                정답 해석: $correctMeaning
+                사용자 해석: $userInterpretation
+
+                위 일본어 예문에 대한 사용자의 해석이 정답과 얼마나 일치하는지 평가해주세요.
+                의미가 같으면 표현이 다르더라도 높은 점수를 주세요.
+
+                다음 형식으로 평가해주세요:
+                정확도: [0-100 사이의 숫자만]
+                이유: [한 문장으로 간단히]
+
+                형식을 정확히 지켜서 응답해주세요.
+            """.trimIndent()
+
+            val response = callGeminiAPI(prompt)
+            parseInterpretationEvaluation(response)
         } catch (e: Exception) {
             AnswerEvaluation(
                 accuracy = 0,
@@ -198,6 +264,54 @@ object AIAnswerChecker {
             accuracy = accuracy.coerceIn(0, 100),
             reason = reason.ifEmpty { "평가를 가져올 수 없습니다." },
             example = fullExample.ifEmpty { "예문을 가져올 수 없습니다." }
+        )
+    }
+
+    private fun parseExampleSentence(response: String): ExampleSentence {
+        val lines = response.lines().map { it.trim() }
+
+        var sentence = ""
+        var correctMeaning = ""
+
+        for (line in lines) {
+            when {
+                line.startsWith("예문:") -> {
+                    sentence = line.substringAfter("예문:").trim()
+                }
+                line.startsWith("정답해석:") -> {
+                    correctMeaning = line.substringAfter("정답해석:").trim()
+                }
+            }
+        }
+
+        return ExampleSentence(
+            sentence = sentence.ifEmpty { "예문을 가져올 수 없습니다." },
+            correctMeaning = correctMeaning.ifEmpty { "해석을 가져올 수 없습니다." }
+        )
+    }
+
+    private fun parseInterpretationEvaluation(response: String): AnswerEvaluation {
+        val lines = response.lines().map { it.trim() }
+
+        var accuracy = 0
+        var reason = ""
+
+        for (line in lines) {
+            when {
+                line.startsWith("정확도:") -> {
+                    val accuracyStr = line.substringAfter("정확도:").trim()
+                    accuracy = accuracyStr.replace(Regex("[^0-9]"), "").toIntOrNull() ?: 0
+                }
+                line.startsWith("이유:") -> {
+                    reason = line.substringAfter("이유:").trim()
+                }
+            }
+        }
+
+        return AnswerEvaluation(
+            accuracy = accuracy.coerceIn(0, 100),
+            reason = reason.ifEmpty { "평가를 가져올 수 없습니다." },
+            example = ""
         )
     }
 }

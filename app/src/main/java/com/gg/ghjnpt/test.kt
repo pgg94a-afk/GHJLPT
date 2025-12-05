@@ -1,4 +1,5 @@
 import com.gg.ghjnpt.AIAnswerChecker
+import com.gg.ghjnpt.ExampleSentence
 import com.gg.ghjnpt.data.Conjunction
 import com.gg.ghjnpt.data.ConjunctionData
 import com.gg.ghjnpt.data.Grammar
@@ -275,16 +276,25 @@ fun wordQuizMode() {
         return
     }
 
-    // 정답 체크 방식 선택
-    println("\n정답 체크 방식을 선택하세요:")
-    println("1. AI 정답 체크 (유사한 답변도 인정)")
-    println("2. 표준 형식 (히라가나 한글발음 - 뜻)")
-    print("선택 (1 또는 2): ")
+    // 퀴즈 유형 선택
+    println("\n퀴즈 유형을 선택하세요:")
+    println("1. 단어 뜻 맞추기 (AI 정답 체크)")
+    println("2. 단어 뜻 맞추기 (표준 형식)")
+    println("3. 예문 해석 맞추기 (AI 생성)")
+    print("선택 (1, 2 또는 3): ")
 
-    val answerCheckMode = readLine()?.trim() ?: "1"
-    val useAI = answerCheckMode == "1"
+    val quizType = readLine()?.trim() ?: "1"
 
-    val words = selectedWords.values.flatten()
+    when (quizType) {
+        "3" -> wordExampleInterpretationMode(selectedWords.values.flatten())
+        else -> {
+            val useAI = quizType == "1"
+            wordMeaningQuizMode(selectedWords.values.flatten(), useAI)
+        }
+    }
+}
+
+fun wordMeaningQuizMode(words: List<JPWord>, useAI: Boolean) {
     val corrects = mutableListOf<JPWord>()
     val wrongs = mutableListOf<JPWord>()
     val randomWords = words.shuffled()
@@ -332,6 +342,75 @@ fun wordQuizMode() {
                 println("❌ 오답! :: ${word.word}: ${word.meaning} ${word.kana} ${word.koreanPronounce}")
                 wrongs.add(word)
             }
+        }
+    }
+
+    println("\n" + "=".repeat(50))
+    println("📊 퀴즈 결과")
+    println("=".repeat(50))
+    println("총 문제 수: ${randomWords.size}")
+    println("정답 수: ${corrects.size}")
+    println("오답 수: ${wrongs.size}")
+    println("정답률: ${String.format("%.1f", (corrects.size.toFloat() / randomWords.size.toFloat()) * 100)}%")
+
+    if (wrongs.isNotEmpty()) {
+        println("\n👻 오답노트 👻")
+        println("-".repeat(50))
+        wrongs.forEach {
+            println("${it.word}")
+            println("  ➜ ${it.kana} : ${it.koreanPronounce} : ${it.meaning}")
+        }
+    }
+
+    println("\n" + "=".repeat(50))
+}
+
+fun wordExampleInterpretationMode(words: List<JPWord>) {
+    val corrects = mutableListOf<JPWord>()
+    val wrongs = mutableListOf<JPWord>()
+    val randomWords = words.shuffled()
+
+    println("\n총 ${randomWords.size}개의 문제가 출제됩니다.")
+    println("=".repeat(50))
+
+    randomWords.forEachIndexed { id, word ->
+        val index = (id + 1).toString().padStart(2, '0')
+
+        // AI로 예문 생성
+        println("\n[$index] 단어: ${word.word}")
+        println("\n🤖 AI가 예문을 생성하는 중...")
+
+        val exampleSentence = AIAnswerChecker.generateExampleSentence(
+            japaneseWord = word.word,
+            correctMeaning = word.meaning
+        )
+
+        println("\n📖 예문: ${exampleSentence.sentence}")
+        print("\n위 예문의 뜻을 입력하세요: ")
+
+        val userInterpretation = readLine()?.trim() ?: ""
+
+        // AI로 해석 평가
+        println("\n🤖 AI가 답변을 평가하는 중...")
+        val evaluation = AIAnswerChecker.evaluateExampleInterpretation(
+            exampleSentence = exampleSentence.sentence,
+            correctMeaning = exampleSentence.correctMeaning,
+            userInterpretation = userInterpretation
+        )
+
+        println("\n📊 평가 결과:")
+        println("  정확도: ${evaluation.accuracy}%")
+        println("  이유: ${evaluation.reason}")
+        println("  정답 해석: ${exampleSentence.correctMeaning}")
+        println("  단어 정보: ${word.word} (${word.kana}) - ${word.koreanPronounce} - ${word.meaning}")
+
+        // 80% 이상이면 정답으로 인정
+        if (evaluation.accuracy >= 80) {
+            println("\n✅ 정답으로 인정합니다!")
+            corrects.add(word)
+        } else {
+            println("\n❌ 오답입니다.")
+            wrongs.add(word)
         }
     }
 
