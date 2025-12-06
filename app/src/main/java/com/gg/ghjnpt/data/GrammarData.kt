@@ -126,4 +126,455 @@ object GrammarData {
         Grammar("~ほど", "V사전형·ない형 / Aい·くない / N + ほど", "~만큼, ~정도(로)", "~ほど", "~호도"),
         Grammar("~わりに（は）", "Nの / V/A/Na 보통형 + わりに（は） <Naだな>", "~에 비해서(는), ~(한) 것치고는", "~わりに（は）", "~와리니(와)")
     )
+
+    val grammarList = listOf(
+        Grammar(
+            japaneseGrammar = "～から～にかけて",
+            connection = "N + からN + にかけて",
+            meaning = "~에서 ~에 걸쳐서",
+            hiragana = "～から～にかけて",
+            koreanPronounce = "카라 ~ 니카케테"
+        ),
+        Grammar(
+            japaneseGrammar = "～てみたらどう（ですか）",
+            connection = "Vて形 + みたらどう",
+            meaning = "~해 보면 어때? (어때요?)",
+            hiragana = "～てみたらどう（ですか）",
+            koreanPronounce = "테미타라도우 (데스카)"
+        ),
+        Grammar(
+            japaneseGrammar = "～として",
+            connection = "N + として",
+            meaning = "~ 로서",
+            hiragana = "～として",
+            koreanPronounce = "토시테"
+        ),
+        Grammar(
+            japaneseGrammar = "～ほど～はない",
+            connection = "N + ほど～はない",
+            meaning = "~만큼 ~은 없다, ~정도로 ~는 아니다",
+            hiragana = "～ほど～はない",
+            koreanPronounce = "호도 ~하나이"
+        ),
+        Grammar(
+            japaneseGrammar = "～ようがない",
+            connection = "Vます形 + ようがない",
+            meaning = "~할 방법이 없다",
+            hiragana = "～ようがない",
+            koreanPronounce = "요우가나이"
+        ),
+        Grammar(
+            japaneseGrammar = "あまり～ない",
+            connection = "",
+            meaning = "별로 ~하지 않다",
+            hiragana = "あまり～ない",
+            koreanPronounce = "아마리~나이"
+        ),
+        Grammar(
+            japaneseGrammar = "必ずしも～ない",
+            connection = "",
+            meaning = "반드시 ~하지는 않다",
+            hiragana = "かならずしも～ない",
+            koreanPronounce = "카나라즈시모 ~나이"
+        ),
+        Grammar(
+            japaneseGrammar = "少しも～ない",
+            connection = "",
+            meaning = "조금도 ~하지 않다",
+            hiragana = "すこしも～ない",
+            koreanPronounce = "스코시모 ~나이"
+        ),
+        Grammar(
+            japaneseGrammar = "たとえ～ても",
+            connection = "",
+            meaning = "설령 ~일지라도",
+            hiragana = "たとえ～ても",
+            koreanPronounce = "타토에  ~테모"
+        ),
+        Grammar(
+            japaneseGrammar = "どんなに～ても",
+            connection = "",
+            meaning = "아무리 ~더라도",
+            hiragana = "どんなに～ても",
+            koreanPronounce = "돈나니 ~테모"
+        ),
+        Grammar(
+            japaneseGrammar = "もしかしたら～かもしれない",
+            connection = "",
+            meaning = "어쩌면 ~일지도 모른다",
+            hiragana = "もしかしたら～かもしれない",
+            koreanPronounce = "모시카시타라 ~카모시레나이"
+        ),
+        Grammar(
+            japaneseGrammar = "おそらく～だろう",
+            connection = "",
+            meaning = "아마 ~일 것이다",
+            hiragana = "おそらく～だろう",
+            koreanPronounce = "오소라쿠 ~다로우"
+        ),
+        Grammar(
+            japaneseGrammar = "もっと～だろう",
+            connection = "",
+            meaning = "분명 ~일 것이다",
+            hiragana = "もっと～だろう",
+            koreanPronounce = "못토 ~다로우"
+        ),
+        Grammar(
+            japaneseGrammar = "まるで～みたいだ",
+            connection = "",
+            meaning = "마치 ~같다",
+            hiragana = "まるで～みたいだ",
+            koreanPronounce = "마루데 ~미타이다"
+        ),
+        Grammar(
+            japaneseGrammar = "せっかく",
+            connection = "",
+            meaning = "모처럼",
+            hiragana = "せっかく",
+            koreanPronounce = "세츠카쿠"
+        ),
+        Grammar(
+            japaneseGrammar = "どうか",
+            connection = "",
+            meaning = "모쪼록",
+            hiragana = "どうか",
+            koreanPronounce = "도우카"
+        ),
+        Grammar(
+            japaneseGrammar = "すっかり",
+            connection = "",
+            meaning = "완전히",
+            hiragana = "すっかり",
+            koreanPronounce = "슷카리"
+        ),
+        Grammar(
+            japaneseGrammar = "～上",
+            connection = "보통형 + 上",
+            meaning = "~(한) 데다가",
+            hiragana = "～うえ",
+            koreanPronounce = "우에"
+        ),
+        Grammar(
+            japaneseGrammar = "～だらけ",
+            connection = "N + だらけ",
+            meaning = "~투성이",
+            hiragana = "～だらけ",
+            koreanPronounce = "~다라케"
+        ),
+        Grammar(
+            japaneseGrammar = "～とおり",
+            connection = "V辞書形・た形 + とおり",
+            meaning = "~한 대로",
+            hiragana = "～とおり",
+            koreanPronounce = "~토오리"
+        ),
+        Grammar(
+            japaneseGrammar = "～のでしょうか",
+            connection = "보통형 + のでしょうか",
+            meaning = "~ 것일까요?",
+            hiragana = "～のでしょうか",
+            koreanPronounce = "~노데쇼우카"
+        ),
+        Grammar(
+            japaneseGrammar = "決して～ない",
+            connection = "",
+            meaning = "결코 ~하지 않다",
+            hiragana = "けっして～ない",
+            koreanPronounce = "케츠시테 ~나이"
+        ),
+        Grammar(
+            japaneseGrammar = "～てばかりいる",
+            connection = "",
+            meaning = "~하고만 있다",
+            hiragana = "～てばかりいる",
+            koreanPronounce = "~테바카리이루"
+        ),
+        Grammar(
+            japaneseGrammar = "～てはじめて",
+            connection = "",
+            meaning = "~하고 나서야",
+            hiragana = "～てはじめて",
+            koreanPronounce = "~테하지메테"
+        ),
+        Grammar(
+            japaneseGrammar = "全く～ない",
+            connection = "",
+            meaning = "전혀 ~하지 않다.",
+            hiragana = "まったく～ない",
+            koreanPronounce = "맛타쿠 ~나이"
+        ),
+        Grammar(
+            japaneseGrammar = "～をきっかけに",
+            connection = "",
+            meaning = "~을 계기로",
+            hiragana = "～をきっかけに",
+            koreanPronounce = "~오킷카케니"
+        ),
+        Grammar(
+            japaneseGrammar = "～くらい",
+            connection = "",
+            meaning = "~정도",
+            hiragana = "～くらい",
+            koreanPronounce = "~쿠라이"
+        ),
+        Grammar(
+            japaneseGrammar = "～ことから",
+            connection = "",
+            meaning = "~것 부터",
+            hiragana = "～ことから",
+            koreanPronounce = "~코토카라"
+        ),
+        Grammar(
+            japaneseGrammar = "～というのは",
+            connection = "",
+            meaning = "~라는 것은",
+            hiragana = "～というのは",
+            koreanPronounce = "~토이우노와"
+        ),
+        Grammar(
+            japaneseGrammar = "～なんか",
+            connection = "",
+            meaning = "~따위",
+            hiragana = "～なんか",
+            koreanPronounce = "~난카"
+        ),
+        Grammar(
+            japaneseGrammar = "～はずがない",
+            connection = "",
+            meaning = "~할 리가 없다",
+            hiragana = "～はずがない",
+            koreanPronounce = "~하즈가나이"
+        ),
+        Grammar(
+            japaneseGrammar = "～こそ",
+            connection = "",
+            meaning = "~야말로",
+            hiragana = "～こそ",
+            koreanPronounce = "~코소"
+        ),
+        Grammar(
+            japaneseGrammar = "～ことにしている",
+            connection = "",
+            meaning = "~하기로 하고 있다",
+            hiragana = "～ことにしている",
+            koreanPronounce = "~코토니시테이루"
+        ),
+        Grammar(
+            japaneseGrammar = "～さ",
+            connection = "",
+            meaning = "~함 (명사화)",
+            hiragana = "～さ",
+            koreanPronounce = "~사"
+        ),
+        Grammar(
+            japaneseGrammar = "～といっても",
+            connection = "",
+            meaning = "~라고는 해도",
+            hiragana = "～といっても",
+            koreanPronounce = "~토잇테모"
+        ),
+        Grammar(
+            japaneseGrammar = "～ものだ",
+            connection = "",
+            meaning = "~하다니",
+            hiragana = "～ものだ",
+            koreanPronounce = "~모노다"
+        ),
+        Grammar(
+            japaneseGrammar = "～ということだ",
+            connection = "",
+            meaning = "~라고 한다",
+            hiragana = "～ということだ",
+            koreanPronounce = "~토이우코토다"
+        ),
+        Grammar(
+            japaneseGrammar = "～といわれている",
+            connection = "",
+            meaning = "~라고 알려져있다",
+            hiragana = "～といわれている",
+            koreanPronounce = "~토이와레테이루"
+        ),
+        Grammar(
+            japaneseGrammar = "～ところに",
+            connection = "",
+            meaning = "~하는데",
+            hiragana = "～ところに",
+            koreanPronounce = "~토코로니"
+        ),
+        Grammar(
+            japaneseGrammar = "～ないと",
+            connection = "",
+            meaning = "~하지 않으면",
+            hiragana = "～ないと",
+            koreanPronounce = "~나이토"
+        ),
+        Grammar(
+            japaneseGrammar = "～にともなって",
+            connection = "",
+            meaning = "~함에 따라",
+            hiragana = "～にともなって",
+            koreanPronounce = "~니토모낫테"
+        ),
+        Grammar(
+            japaneseGrammar = "～一方",
+            connection = "",
+            meaning = "~하는 한편",
+            hiragana = "～いっぽう",
+            koreanPronounce = "~잇포우"
+        ),
+        Grammar(
+            japaneseGrammar = "～につき",
+            connection = "",
+            meaning = "~당",
+            hiragana = "～につき",
+            koreanPronounce = "~니츠키"
+        ),
+        Grammar(
+            japaneseGrammar = "～に反し",
+            connection = "",
+            meaning = "~와 반대로",
+            hiragana = "～にはんし",
+            koreanPronounce = "~니한시"
+        ),
+        Grammar(
+            japaneseGrammar = "～によって",
+            connection = "",
+            meaning = "~에 의해",
+            hiragana = "～によって",
+            koreanPronounce = "~니욧테"
+        ),
+        Grammar(
+            japaneseGrammar = "～からといって",
+            connection = "",
+            meaning = "~라고 해서",
+            hiragana = "～からといって",
+            koreanPronounce = "~카라토잇테"
+        ),
+        Grammar(
+            japaneseGrammar = "～っぱなし",
+            connection = "",
+            meaning = "~인 채로",
+            hiragana = "～っぱなし",
+            koreanPronounce = "~읏포나시"
+        ),
+        Grammar(
+            japaneseGrammar = "～に関して",
+            connection = "",
+            meaning = "~에 관해서",
+            hiragana = "～にかんして",
+            koreanPronounce = "~니칸시테"
+        ),
+        Grammar(
+            japaneseGrammar = "～に違いない",
+            connection = "",
+            meaning = "~임에 틀림없다",
+            hiragana = "～にちがいない",
+            koreanPronounce = "~니치가이나이"
+        ),
+        Grammar(
+            japaneseGrammar = "～のは～からだ",
+            connection = "",
+            meaning = "~것은 ~이기 때문이다",
+            hiragana = "～のは～からだ",
+            koreanPronounce = "~노하 ~카라다"
+        ),
+        Grammar(
+            japaneseGrammar = "～たところ",
+            connection = "",
+            meaning = "~했더니",
+            hiragana = "～たところ",
+            koreanPronounce = "~타토코로"
+        ),
+        Grammar(
+            japaneseGrammar = "～としても",
+            connection = "",
+            meaning = "~라고 해도",
+            hiragana = "～としても",
+            koreanPronounce = "~토시테모"
+        ),
+        Grammar(
+            japaneseGrammar = "～にしては",
+            connection = "",
+            meaning = "~치고는",
+            hiragana = "～にしては",
+            koreanPronounce = "~니시테하"
+        ),
+        Grammar(
+            japaneseGrammar = "～のは～だ",
+            connection = "",
+            meaning = "~것은 ~이다",
+            hiragana = "～のは～だ",
+            koreanPronounce = "~노하 ~다"
+        ),
+        Grammar(
+            japaneseGrammar = "～わけがない",
+            connection = "",
+            meaning = "~할 리가 없다",
+            hiragana = "～わけがない",
+            koreanPronounce = "~와케가나이"
+        ),
+        Grammar(
+            japaneseGrammar = "～気味",
+            connection = "",
+            meaning = "~기미",
+            hiragana = "～ぎみ",
+            koreanPronounce = "~기미"
+        ),
+        Grammar(
+            japaneseGrammar = "～ことだ",
+            connection = "",
+            meaning = "~것이다, ~해야 한다",
+            hiragana = "～ことだ",
+            koreanPronounce = "~코토다"
+        ),
+        Grammar(
+            japaneseGrammar = "～せいで",
+            connection = "",
+            meaning = "~탓에",
+            hiragana = "～せいで",
+            koreanPronounce = "~세이데"
+        ),
+        Grammar(
+            japaneseGrammar = "～たび",
+            connection = "",
+            meaning = "~할 때마다",
+            hiragana = "～たび",
+            koreanPronounce = "~타비"
+        ),
+        Grammar(
+            japaneseGrammar = "～ようにしている",
+            connection = "",
+            meaning = "~하도록 하고있다",
+            hiragana = "～ようにしている",
+            koreanPronounce = "~요우니시테이루"
+        ),
+        Grammar(
+            japaneseGrammar = "～おかげで",
+            connection = "",
+            meaning = "~덕분에",
+            hiragana = "～おかげで",
+            koreanPronounce = "~오카게데"
+        ),
+        Grammar(
+            japaneseGrammar = "～からこそ",
+            connection = "",
+            meaning = "~이니까",
+            hiragana = "～からこそ",
+            koreanPronounce = "~카라코소"
+        ),
+        Grammar(
+            japaneseGrammar = "～ことか",
+            connection = "",
+            meaning = "~했는지",
+            hiragana = "～ことか",
+            koreanPronounce = "~코토카"
+        ),
+        Grammar(
+            japaneseGrammar = "～にとって",
+            connection = "",
+            meaning = "~에게 있어",
+            hiragana = "～にとって",
+            koreanPronounce = "~니톳테"
+        )
+    )
 }

@@ -200,6 +200,7 @@ fun grammarQuizMode() {
 
 fun selectWordGroups(): Map<Int, List<JPWord>> {
     val allWords = mapOf(
+        -2 to JPWordData.jpUnknownWord2,
         -1 to JPWordData.jpUnknownWord,
         1 to JPWordData.JPWords,
         2 to JPWordData.JPWords2,
@@ -230,7 +231,7 @@ fun selectWordGroups(): Map<Int, List<JPWord>> {
         allWords
     } else {
         val selectedIndices = input.split(",").mapNotNull {
-            it.trim().toIntOrNull()?.takeIf { index -> index in -1..14 }
+            it.trim().toIntOrNull()?.takeIf { index -> index in -2..14 }
         }
         allWords.filterKeys { it in selectedIndices }
     }
